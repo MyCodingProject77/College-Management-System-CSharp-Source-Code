@@ -1,0 +1,165 @@
+using Mysql.Data.MysqlClient;
+
+
+   CREATE DATABASE collegedb;
+
+USE collegedb;
+
+CREATE TABLE students (
+    StudentID INT NOT NULL,
+    StudentName VARCHAR(50),
+    Email VARCHAR(50),
+    Phone VARCHAR(50),
+    PRIMARY KEY (StudentID)
+);
+
+
+Add MySQL Library
+ Add the MySQL.Data library via NuGet Package Manager:
+ Right-click on your project in Solution Explorer.
+ Select "Manage NuGet Packages."
+ Search for MySql.Data and install it.
+
+
+
+
+ right click on project and create class (put code inside internal class)
+
+ private MySqlConnection connection;
+
+public DatabaseConnection()
+{
+    string connectionString = "Server=127.0.0.1;Database=collegedb;Uid=root;Pwd=Msixyz7777@;";
+    connection = new MySqlConnection(connectionString);
+}
+
+public MySqlConnection GetConnection()
+{
+    return connection;
+}
+
+
+
+
+
+    Student
+
+    Insert Code
+
+
+    int studentid = int.Parse(textBox1.Text);
+string studentname = textBox2.Text;
+string email = textBox3.Text;
+string phone = textBox4.Text;
+
+string query = "INSERT INTO students (StudentID, StudentName, Email, Phone) VALUES (@StudentID, @StudentName, @Email, @Phone)";
+
+using (MySqlConnection conn = new DatabaseConnection().GetConnection())
+{
+    conn.Open();
+    using (MySqlCommand cmd = new MySqlCommand(query, conn))
+    {
+        cmd.Parameters.AddWithValue("@StudentID", studentid);
+        cmd.Parameters.AddWithValue("@StudentName", studentname);
+        cmd.Parameters.AddWithValue("@Email", email);
+        cmd.Parameters.AddWithValue("@Phone", phone);
+
+        cmd.ExecuteNonQuery();
+    }
+}
+
+MessageBox.Show("Record Inserted Successfully");
+StudentData();
+
+
+
+
+
+    StudentData Code
+
+    string query = "SELECT * FROM students";
+
+using (MySqlConnection conn = new DatabaseConnection().GetConnection())
+{
+    conn.Open();
+    using (MySqlCommand cmd = new MySqlCommand(query, conn))
+    {
+        using (MySqlDataAdapter adapter = new MySqlDataAdapter(cmd))
+        {
+            DataTable dataTable = new DataTable();
+            adapter.Fill(dataTable);
+            dataGridView1.DataSource = dataTable;
+        }
+    }
+}
+
+
+
+
+
+
+    Update Code
+
+
+    int studentid = int.Parse(textBox1.Text);
+string studentname = textBox2.Text;
+string email = textBox3.Text;
+string phone = textBox4.Text;
+
+string query = "UPDATE students SET StudentName=@StudentName, Email=@Email, Phone=@Phone WHERE StudentID=@StudentID";
+
+using (MySqlConnection conn = new DatabaseConnection().GetConnection())
+{
+    conn.Open();
+    using (MySqlCommand cmd = new MySqlCommand(query, conn))
+    {
+        cmd.Parameters.AddWithValue("@StudentID", studentid);
+        cmd.Parameters.AddWithValue("@StudentName", studentname);
+        cmd.Parameters.AddWithValue("@Email", email);
+        cmd.Parameters.AddWithValue("@Phone", phone);
+
+        cmd.ExecuteNonQuery();
+    }
+}
+
+MessageBox.Show("Record Updated Successfully");
+StudentData();
+
+
+
+
+
+
+       Delete Code
+
+
+       int studentid = int.Parse(textBox1.Text);
+
+
+string query = "DELETE FROM students WHERE StudentID=@StudentID";
+
+using (MySqlConnection conn = new DatabaseConnection().GetConnection())
+{
+    conn.Open();
+    using (MySqlCommand cmd = new MySqlCommand(query, conn))
+    {
+        cmd.Parameters.AddWithValue("@StudentID", studentid);
+        
+
+        cmd.ExecuteNonQuery();
+    }
+}
+
+MessageBox.Show("Record Deleted Successfully");
+StudentData();
+
+
+
+
+
+      
+
+
+    
+
+ 
